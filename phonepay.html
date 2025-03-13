@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhonePe Payment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Background Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #d32f2f;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 20px;
+        }
+
+        /* QR Code Styling */
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        /* Button Styling */
+        .confirm-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .confirm-button:hover {
+            background: #388E3C;
+        }
+
+        /* Message Styling */
+        .message {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .error {
+            background-color: #d32f2f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>PhonePe Payment</h2>
+        <p class="total">Total: ₹<span id="order-total">0.00</span></p>
+        
+        <!-- QR Code will be generated here -->
+        <div class="qr-container">
+            <div id="qrcode"></div>
+        </div>
+
+        <button class="confirm-button" onclick="confirmPayment()">Confirm Payment</button>
+
+        <!-- Message Box -->
+        <p id="payment-message" class="message"></p>
+    </div>
+
+    <script>
+        // Retrieve total amount from localStorage
+        let total = localStorage.getItem("total") || "0.00";
+        document.getElementById("order-total").textContent = total;
+
+        // Generate UPI Payment Link
+        function generateUPILink(amount) {
+            let upiID = "9121731449@axl"; // Replace with your UPI ID
+            let name = "Your Business";
+            let transactionNote = "Order Payment";
+            let currency = "INR";
+
+            return `upi://pay?pa=${upiID}&pn=${encodeURIComponent(name)}&am=${amount}&cu=${currency}&tn=${encodeURIComponent(transactionNote)}`;
+        }
+
+        // Generate QR code dynamically
+        function generateQRCode() {
+            let upiLink = generateUPILink(total);
+            new QRCode(document.getElementById("qrcode"), {
+                text: upiLink,
+                width: 200,
+                height: 200
+            });
+        }
+
+        generateQRCode();
+
+        function confirmPayment() {
+    let isPaid = confirm("Did you complete the payment?");
+    let messageBox = document.getElementById("payment-message");
+
+    if (isPaid) {
+        // Show success message
+        messageBox.textContent = "✅ Payment Successful! Your order has been placed.";
+        messageBox.className = "message success";
+        messageBox.style.display = "block";
+
+        // Clear local storage
+        localStorage.removeItem("cart");
+        localStorage.removeItem("total");
+
+        // Redirect to index.html after 3 seconds
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 2000);
+    } else {
+        // Show failure message
+        messageBox.textContent = "❌ Payment Failed! Please try again.";
+        messageBox.className = "message error";
+        messageBox.style.display = "block";
+    }
+}
+
+
+    </script>
+</body>
+</html>

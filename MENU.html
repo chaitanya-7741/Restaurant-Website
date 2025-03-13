@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        .body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color:   #1e3c72 ;
+            color: #1e3c72;
+        }
+        .header {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        /* Menu takes 80% of the space */
+        .container {
+            display: grid;
+            grid-template-columns: 3fr 350px; /* Main content and space for fixed cart */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background:  #1e3c72 (255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu {
+            grid-column: 1;
+            width: 100%;
+        }
+        .cart {
+    position: fixed;
+    top: 120px; /* Distance from top of viewport */
+    right: 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    max-width: 350px;
+    width: 300px;
+    z-index: 1000;
+    border: 1px solid  #1e3c72 ;
+    max-height: calc(100vh - 160px); /* Viewport height minus top margin and some padding */
+    overflow-y: auto;
+}
+
+/* Add smooth scrollbar for cart contents */
+.cart::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart::-webkit-scrollbar-track {
+    background:  #1e3c72 ;
+    border-radius: 10px;
+}
+
+.cart::-webkit-scrollbar-thumb {
+    background: #d32f2f;
+    border-radius: 10px;
+}
+
+.cart h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.cart-count {
+    background: #f8f8f8;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.cart ul {
+    list-style: none;
+    padding: 0;
+    max-height: 40vh;
+    overflow-y: auto;
+    margin: 15px 0;
+    scroll-behavior: smooth;
+}
+
+.cart ul::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart ul::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart ul::-webkit-scrollbar-thumb {
+    background: #d32f2f;
+    border-radius: 10px;
+}
+
+.cart ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+.cart-total {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 15px 0;
+    border-top: 2px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+.remove-button {
+    background: #ff5252;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.remove-button:hover {
+    background: #ff1744;
+    transform: scale(1.05);
+}
+
+.payment-button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+}
+
+.payment-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .menu-item {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+            margin: 15px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .menu-item h3 {
+            margin: 15px 0;
+            color: #d32f2f;
+            font-size: 1.3em;
+        }
+        .menu-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+            height: 60px;
+            overflow: hidden;
+        }
+        .menu-item .price {
+            font-size: 18px;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        .add-to-cart {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .add-to-cart:hover {
+            transform: scale(1.05);
+        }
+        
+        .payment-button {
+            width: 100%;
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        .payment-button:hover {
+            transform: scale(1.05);
+        }
+        .remove-button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .header button {
+            background: white;
+            color: #d32f2f;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .header button:hover {
+            background: #ffcccb;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .section-title {
+            position: relative;
+            text-align: center;
+            padding: 30px 0;
+            margin: 40px 0;
+            color: #1a237e;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #d32f2f, #1a237e);
+        }
+        .category-label {
+    width: 100%;
+    padding: 15px 25px;
+    background: linear-gradient(90deg, #f8f8f8, #ffffff);
+    margin: 25px 0;
+    border-left: 4px solid #1a237e;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.category-label h3 {
+    color: #1a237e;
+    font-size: 1.4em;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <button onclick="goBack()">&#8592; Back</button>
+        <span>Our Delicious Menu</span>
+        <button onclick="goNext()">Next &#8594;</button>
+    </div>
+    <div class="container">
+        <div class="section-title">
+            <h2>FOOD ITEMS</h2>
+        </div>
+    <div class="menu">
+        <div class="category-label">
+            <h3>Main Course</h3>
+        </div>
+        <div class="menu-item">
+            <img src="https://5.imimg.com/data5/YR/NQ/GLADMIN-51056631/big-crunch-veg-classic-burger-500x500.png" alt="Burger">
+            <h3>Classic Burger</h3>
+            <p>Juicy beef patty with fresh lettuce, tomato, and cheese.</p>
+            <div class="price">₹250</div>
+            <button class="add-to-cart" onclick="addToCart('Classic Burger', 250)">Add to Cart</button>
+        </div>
+        <div class="category-label">
+            <h3>Biryanis</h3>
+        </div>
+        <div class="menu-item">
+            <img src="https://lh5.googleusercontent.com/proxy/YSiFdIaKRYW0QsO7mSFMgfYDA7cy7yAfQSVrkvowKz8FQGhYqE45sx3q8bGJvZus1CP6O3O0XASwIC8NUtO_Bei0-Yo85EGU2Q2r_idqqUMQZm84zMs5gQ7b" alt="Prawns Biriyani">
+            <h3>Prawns Biriyani</h3>
+            <p>Prawns biryani is a fragrant, spicy, and flavorful rice dish made with succulent prawns, aromatic spices, and basmati rice.</p>
+            <div class="price">₹5</div>
+            <button class="add-to-cart" onclick="addToCart('Prawns Biriyani', 5)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/ecaeb2cc-a950-4645-a648-9137305b3287/Derivates/df977b90-193d-49d4-a59d-8dd922bcbf65.jpg" alt="Pizza">
+            <h3>Margherita Pizza</h3>
+            <p>Fresh tomatoes, mozzarella cheese, and basil.</p>
+            <div class="price">₹230</div>
+            <button class="add-to-cart" onclick="addToCart('Margherita Pizza', 230)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://www.spicebangla.com/wp-content/uploads/2024/08/Spicy-Pasta-recipe-optimised-scaled.webp" alt="Pasta">
+            <h3>Pasta</h3>
+            <p>Classic Italian pasta with creamy sauce and pancetta.</p>
+            <div class="price">₹140</div>
+            <button class="add-to-cart" onclick="addToCart('Pasta', 140)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://suhana.com/cdn/shop/articles/500-x-380-Biryani.png?v=1709544702" alt="Briyani">
+            <h3>Dum Briyani</h3>
+            <p>Dum Biryani is a slow-cooked, aromatic rice dish layered with marinated meat, fragrant spices, and saffron-infused basmati rice, sealed to trap flavors.</p>
+            <div class="price">₹150</div>
+            <button class="add-to-cart" onclick="addToCart('Briyani', 150)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://fullofplants.com/wp-content/uploads/2020/05/sweet-and-sour-spicy-thai-fried-rice-easy-vegan-meal-with-vegetables-thumb.jpg" alt="Fired Rice">
+            <h3>FIRED RICE</h3>
+            <p>Fried rice is a flavorful stir-fried dish made with cooked rice, vegetables, eggs, and protein, seasoned with soy sauce and aromatic spices.</p>
+            <div class="price">₹120</div>
+            <button class="add-to-cart" onclick="addToCart('Fired Rice', 120)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://www.kitchensanctuary.com/wp-content/uploads/2020/04/Chicken-Fried-Rice-square-FS-.jpg" alt="Chicken Rice">
+            <h3>Chicken Fried Rice</h3>
+            <p>Chicken rice is a delicious dish featuring tender chicken served with fragrant, flavorful rice, often accompanied by sauces and soup.</p>
+            <div class="price">₹170</div>
+            <button class="add-to-cart" onclick="addToCart('Chicken Rice', 170)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://i.ytimg.com/vi/iNwTdd2uk9s/maxresdefault.jpg" alt="Fry piece">
+            <h3>Fry piece</h3>
+            <p>Fry piece is a crispy, flavorful fried chicken or meat dish, marinated with spices and deep-fried to golden perfection.</p>
+            <div class="price">₹200</div>
+            <button class="add-to-cart" onclick="addToCart('Fry piece', 200)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://us2guntur.com/images//10067img/ChikWingsBiryani_B_281020.jpg" alt="Wings Biriyani">
+            <h3>Wings Biriyani</h3>
+            <p>Wings Biryani is a flavorful rice dish made with marinated chicken wings, aromatic spices, and basmati rice, slow-cooked to perfection for rich taste.</p>
+            <div class="price">₹230</div>
+            <button class="add-to-cart" onclick="addToCart('Wings Biriyani', 230)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+    <img src="https://www.cookwithmanali.com/wp-content/uploads/2018/04/Veg-Hakka-Noodles-500x500.jpg" alt="Hakka Noodles">
+    <h3>Veg Hakka Noodles</h3>
+    <p>Stir-fried noodles with crunchy vegetables and aromatic Indo-Chinese spices.</p>
+    <div class="price">₹130</div>
+    <button class="add-to-cart" onclick="addToCart('Veg Hakka Noodles', 130)">Add to Cart</button>
+</div>
+
+<div class="menu-item">
+    <img src="https://www.licious.in/blog/wp-content/uploads/2020/12/Hyderabadi-chicken-Biryani.jpg" alt="Hyderabadi Biryani">
+    <h3>Hyderabadi Biryani</h3>
+    <p>Aromatic basmati rice layered with tender chicken and authentic Hyderabadi spices.</p>
+    <div class="price">₹280</div>
+    <button class="add-to-cart" onclick="addToCart('Hyderabadi Biryani', 280)">Add to Cart</button>
+</div>
+
+<div class="menu-item">
+    <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-1.jpg" alt="Paneer Butter Masala">
+    <h3>Paneer Butter Masala</h3>
+    <p>Creamy curry with soft paneer cubes in a rich tomato-based gravy.</p>
+    <div class="price">₹220</div>
+    <button class="add-to-cart" onclick="addToCart('Paneer Butter Masala', 220)">Add to Cart</button>
+</div>
+
+<div class="menu-item">
+    <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2022/02/schezwan-noodles-recipe.jpg" alt="Schezwan Noodles">
+    <h3>Schezwan Noodles</h3>
+    <p>Spicy Indo-Chinese noodles with vegetables in hot schezwan sauce.</p>
+    <div class="price">₹160</div>
+    <button class="add-to-cart" onclick="addToCart('Schezwan Noodles', 160)">Add to Cart</button>
+</div>
+
+<div class="menu-item">
+    <img src="https://www.cubesnjuliennes.com/wp-content/uploads/2020/07/Chicken-Manchurian-Recipe.jpg" alt="Chicken Manchurian">
+    <h3>Chicken Manchurian</h3>
+    <p>Deep-fried chicken balls tossed in spicy, tangy manchurian sauce.</p>
+    <div class="price">₹240</div>
+    <button class="add-to-cart" onclick="addToCart('Chicken Manchurian', 240)">Add to Cart</button>
+</div>
+
+<div class="menu-item">
+    <img src="https://www.indianveggiedelight.com/wp-content/uploads/2017/09/veg-momos-featured.jpg" alt="Veg Momos">
+    <h3>Veg Momos</h3>
+    <p>Steamed dumplings filled with spiced vegetables, served with hot chutney.</p>
+    <div class="price">₹120</div>
+    <button class="add-to-cart" onclick="addToCart('Veg Momos', 120)">Add to Cart</button>
+</div>
+        </div>
+    <div class="drinks-section"></div>
+    <div class="section-title">
+        <h2>DRINKS</h2>
+    </div>
+    <div class="menu" id="drinks-section">
+        <div class="menu-item">
+            <img src="https://citma.shorthandstories.com/6e7d13ef-02b7-42af-9d16-cce70df03f84/assets/G3zfKMJ2tq/shorthand-images5-2560x1440.jpg" alt="Coca Cola">
+            <h3>Coca Cola</h3>
+            <p>Coca-Cola is a popular carbonated soft drink with a sweet, refreshing taste and a signature blend of flavors.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Coca Cola', 40)">Add to Cart</button>
+        </div>
+        
+        <div class="menu-item">
+            <img src="https://images.cnbctv18.com/wp-content/uploads/2022/02/thums-up-1-1019x573.png" alt="Thums Up">
+            <h3>Thums Up</h3>
+            <p>Coca-Cola is a popular carbonated soft drink with a sweet, refreshing taste and a signature blend of flavors.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Thums Up', 40)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://www.ghirne.com/wp-content/uploads/2025/01/images-4.jpeg" alt="Sprite">
+            <h3>Sprite</h3>
+            <p>Sprite is a crisp, clear, and refreshing lemon-lime flavored soft drink with a fizzy, citrusy taste.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Sprite', 40)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/307876249/BX/DL/YH/98405810/red-bull-energy-drink-250ml.jpg" alt="Red Bull">
+            <h3>Red Bull</h3>
+            <p>Red Bull is an energy drink known for its stimulating blend of caffeine, taurine, and B vitamins, providing a quick boost of energy and alertness.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Red Bull', 40)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://api.freelogodesign.org/assets/blog/thumb/4d422f79f0274913aeb31571270b9ea2_1176x840.jpg?t=638369671740000000" alt="7UP">
+            <h3>7UP</h3>
+            <p>7UP is a refreshing, lemon-lime flavored soft drink with a crisp and bubbly taste.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('7UP', 40)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://cdn.zeptonow.com/production/ik-seo/tr:w-640,ar-1200-1200,pr-true,f-auto,q-80/cms/product_variant/5dea84a6-3e99-49af-a0fb-0c899f3ae358/Pepsi-Soft-Drink.jpeg" alt="Pepsi">
+            <h3>Pepsi</h3>
+            <p>Pepsi is a popular carbonated soft drink with a bold, sweet, and refreshing cola flavor.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Pepsi', 40)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="https://5.imimg.com/data5/SELLER/Default/2023/7/325817723/MB/YR/HX/106956345/mountain-dew-can-330-ml-2.jpg" alt="Mountain Dew">
+            <h3>Mountain Dew</h3>
+            <p>Mountain Dew is a citrus-flavored, highly carbonated soft drink known for its bold, refreshing taste and high caffeine content.</p>
+            <div class="price">₹40</div>
+            <button class="add-to-cart" onclick="addToCart('Mountain Dew', 40)">Add to Cart</button>
+        </div>
+        
+    </div>
+    <div class="cart-container">
+    <div class="cart" id="cart">
+        <h2>Your Cart</h2>
+        <div class="cart-count">Items in cart: <span id="cart-count"></span></div>
+        <ul id="cart-items"></ul>
+        <div class="cart-total">Total: ₹<span id="total-amount">0.00</span></div>
+        <button class="payment-button" onclick="proceedToPayment()">Proceed to Payment</button>
+    </div>
+    </div>
+    <script>
+        
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function addToCart(item, price) {
+    cart.push({ item, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+}
+
+function updateCart() {
+    const cartList = document.getElementById("cart-items");
+    const totalAmount = document.getElementById("total-amount");
+    const cartCount = document.getElementById("cart-count");
+    const cartContainer = document.querySelector(".cart-container");
+
+    cartList.innerHTML = "";
+    let total = 0;
+
+    if (cart.length === 0) {
+        cartContainer.style.display = "none";
+        cartCount.textContent = 0;
+        return;
+    } else {
+        cartContainer.style.display = "block";
+    }
+
+    cart.forEach(({ item, price }, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${item} - ₹${price.toFixed(2)}`;
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.classList.add("remove-button");
+        removeButton.onclick = () => removeFromCart(index);
+        li.appendChild(removeButton);
+        cartList.appendChild(li);
+        total += price;
+    });
+
+    totalAmount.textContent = total.toFixed(2);
+    cartCount.textContent = cart.length;
+}
+
+window.onload = updateCart;
+        function proceedToPayment() {
+            window.location.href = "payment.html";
+        }
+        function goBack() {
+            window.history.back();
+        }
+        function goNext() {
+            window.location.href = "CONTACT.html";
+        }
+        updateCart();
+        
+    </script>
+</body>
+
+</html>

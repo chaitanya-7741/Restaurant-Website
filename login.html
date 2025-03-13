@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - SAVOR BITES</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff6600, #ff3300);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .auth-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            text-align: left;
+            margin-top: 10px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        input:focus {
+            border-color: #ff6600;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e65c00;
+        }
+        
+        p {
+            margin-top: 15px;
+        }
+        
+        a {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-container {
+            display: none;
+        }
+        
+        #login-form {
+            display: block;
+        }
+    </style>    
+</head>
+<body>
+    <div class="auth-container">
+        <div id="login-form" class="form-container">
+            <h2>Sign In</h2>
+            <form onsubmit="validateLogin(event)">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@gmail\.com" required>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+        </div>
+        
+        <div id="signup-form" class="form-container">
+            <h2>Sign Up</h2>
+            <form onsubmit="registerUser(event)">
+                <label for="email-signup">Gmail</label>
+                <input type="email" id="email-signup" name="email" pattern="[a-zA-Z0-9._%+-]+@gmail\.com" required>
+                
+                <label for="new-password">Password</label>
+                <input type="password" id="new-password" name="new-password" required>
+                
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="showLogin()">Sign in</a></p>
+        </div>
+    </div>
+    
+    <script>
+    function showLogin() {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("signup-form").style.display = "none";
+    }
+
+    function showSignup() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("signup-form").style.display = "block";
+    }
+
+    function registerUser(event) {
+        event.preventDefault(); 
+        let email = document.getElementById("email-signup").value;
+        let password = document.getElementById("new-password").value;
+        
+        localStorage.setItem(email, password); // Store email-password pair
+        localStorage.setItem("userEmail", email); // Store logged-in user
+        alert("Account created successfully!");
+        window.location.href = "index.html";
+    }
+
+    function validateLogin(event) {
+        event.preventDefault();
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        
+        let storedPassword = localStorage.getItem(email);
+        
+        if (storedPassword && storedPassword === password) {
+            localStorage.setItem("userEmail", email); // Store logged-in user
+            alert("Login successful!");
+            window.location.href = "index.html";
+        } else {
+            alert("Invalid email or password!");
+        }
+    }
+
+    </script>
+</body>
+</html>

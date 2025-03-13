@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #d32f2f;
+        }
+        .order-summary {
+            margin-bottom: 20px;
+        }
+        .order-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+        .order-summary ul li {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .customer-details input, .customer-details textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .payment-options label {
+            display: block;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .confirm-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            margin-top: 20px;
+        }
+        .customer-details input:invalid,
+        .customer-details textarea:invalid {
+            border-color: #d32f2f;
+        }
+
+        .customer-details input:focus,
+        .customer-details textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Payment Details</h2>
+        
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <ul id="order-items"></ul>
+            <p class="total">Total: ₹<span id="order-total"></span></p>
+        </div>
+
+        <div class="customer-details">
+            <h3>Customer Details</h3>
+            <input type="text" id="full-name" placeholder="Full Name" required>
+            <input type="text" id="phone-number" placeholder="Phone Number" required>
+            <textarea id="address" placeholder="Delivery Address" required></textarea>
+        </div>
+
+        <div class="payment-options">
+            <h3>Select Payment Method</h3>
+            <label><input type="radio" name="payment" value="phonepe"> PhonePe</label>
+            <label><input type="radio" name="payment" value="paytm"> Paytm</label>
+            <label><input type="radio" name="payment" value="cod"> Cash on Delivery</label>
+        </div>
+
+        <button class="confirm-button" onclick="confirmOrder()">Confirm Order</button>
+    </div>
+
+    <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const orderList = document.getElementById("order-items");
+    const totalAmount = document.getElementById("order-total");
+    let selectedPayment = "";
+
+    // Display cart items
+    let total = 0;
+    cart.forEach(({ item, price }) => {
+        const li = document.createElement("li");
+        li.textContent = `${item} - ₹${price.toFixed(2)}`;
+        orderList.appendChild(li);
+        total += price;
+    });
+    totalAmount.textContent = total.toFixed(2);
+
+    localStorage.setItem("total", total.toFixed(2));
+
+    
+    document.querySelectorAll('input[name="payment"]').forEach((input) => {
+        input.addEventListener('change', function() {
+            selectedPayment = this.value;
+        });
+    });
+
+    async function confirmOrder() {
+        const fullName = document.getElementById("full-name").value;
+        const phoneNumber = document.getElementById("phone-number").value;
+        const address = document.getElementById("address").value;
+        const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value;
+
+    
+        if (!fullName || !phoneNumber || !address) {
+            alert("Please fill in all customer details.");
+            return;
+        }
+
+        if (!selectedPayment) {
+            alert("Please select a payment method.");
+            return;
+        }
+
+        
+        const orderData = {
+            customerName: fullName,
+            phoneNumber: phoneNumber,
+            address: address,
+            orderItems: cart,
+            totalAmount: total,
+            paymentMethod: selectedPayment,
+            status: 'pending'
+        };
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2fa1D7Wdy0JpJbS5ZJIH8uLNYoUXNhSCkLKfhSgK_cpKOXEaxhk-cXoHycFo-QL3oiA/exec';
+
+        try {
+            const response = await fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            // Clear cart
+            localStorage.removeItem("cart");
+
+            // Handle redirection based on payment method
+            switch(selectedPayment) {
+                case "phonepe":
+                    window.location.href = "phonepay.html";
+                    break;
+                case "paytm":
+                    window.location.href = "paytm.html";
+                    break;
+                case "cod":
+                    alert("Order Placed! Thank you for ordering.");
+                    window.location.href = "index.html";
+                    break;
+                default:
+                    alert("Invalid payment method selected.");
+            }
+        } catch (error) {
+            console.error("Error processing order:", error);
+            alert("There was an error processing your order. Please try again.");
+        }
+    }
+    </script>
+</body>
+</html>
+
