@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="responsive.css">
     <title>Restaurant Menu</title>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         .body {
             font-family: 'Georgia', serif;
             margin: 0;
@@ -25,15 +29,17 @@
         }
         /* Menu takes 80% of the space */
         .container {
-            display: grid;
-            grid-template-columns: 3fr 350px; /* Main content and space for fixed cart */
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background:  #1e3c72 (255, 255, 255, 0.95);
+            display: flex; /* Use Flexbox for centering */
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+            max-width: 900px; /* Reduced width */
+            margin: 0 auto; /* Center horizontally */
+            padding: 15px; /* Reduced padding */
+            background: white;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-height: 60vh; /* Reduced height */
         }
 
         .menu {
@@ -321,11 +327,80 @@
     font-family: 'Playfair Display', serif;
     letter-spacing: 1px;
 }
+
+/* Add animation for buttons */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.add-to-cart {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart:hover {
+    transform: scale(1.05);
+}
+
+.add-to-cart:active {
+    animation: bounce 0.5s;
+}
+
+.menu-navigation {
+    position: fixed; 
+    top: 100px; 
+    left: 0; 
+    width: 180px; 
+    background: linear-gradient(135deg, #ff7043, #d32f2f); 
+    padding: 10px 5px; 
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 0 10px 10px 0; 
+    z-index: 1000; 
+    height: calc(100vh - 120px); 
+    overflow-y: auto; 
+}
+
+.menu-navigation a {
+    display: block; 
+    color: white;
+    text-decoration: none;
+    font-size: 14px; 
+    font-weight: bold;
+    padding: 8px 10px;
+    margin-bottom: 5px; 
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1); 
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+.menu-navigation a:hover {
+    background: rgba(255, 255, 255, 0.3); 
+    transform: scale(1.05); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
+        
         <button onclick="goBack()">&#8592; Back</button>
         <span>Our Delicious Menu</span>
         <button onclick="goNext()">Next &#8594;</button>
@@ -334,181 +409,239 @@
         <div class="section-title">
             <h2>FOOD ITEMS</h2>
         </div>
+    <div class="menu-navigation">
+    <a href="#biryanis">🍛 Biryanis</a>
+    <a href="#mandis">🍗 Mandis</a>
+    <a href="#cool-drinks">🥤 Cool Drinks</a>
+    <a href="#fast-foods">🍔 Fast Foods</a>
+</div>
     <div class="menu">
-        <div class="category-label">
-            <h3>Main Course</h3>
-        </div>
-        <div class="menu-item">
-            <img src="https://5.imimg.com/data5/YR/NQ/GLADMIN-51056631/big-crunch-veg-classic-burger-500x500.png" alt="Burger">
-            <h3>Classic Burger</h3>
-            <p>Juicy beef patty with fresh lettuce, tomato, and cheese.</p>
-            <div class="price">₹250</div>
-            <button class="add-to-cart" onclick="addToCart('Classic Burger', 250)">Add to Cart</button>
-        </div>
-        <div class="category-label">
-            <h3>Biryanis</h3>
-        </div>
-        <div class="menu-item">
-            <img src="https://lh5.googleusercontent.com/proxy/YSiFdIaKRYW0QsO7mSFMgfYDA7cy7yAfQSVrkvowKz8FQGhYqE45sx3q8bGJvZus1CP6O3O0XASwIC8NUtO_Bei0-Yo85EGU2Q2r_idqqUMQZm84zMs5gQ7b" alt="Prawns Biriyani">
-            <h3>Prawns Biriyani</h3>
-            <p>Prawns biryani is a fragrant, spicy, and flavorful rice dish made with succulent prawns, aromatic spices, and basmati rice.</p>
-            <div class="price">₹5</div>
-            <button class="add-to-cart" onclick="addToCart('Prawns Biriyani', 5)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/ecaeb2cc-a950-4645-a648-9137305b3287/Derivates/df977b90-193d-49d4-a59d-8dd922bcbf65.jpg" alt="Pizza">
-            <h3>Margherita Pizza</h3>
-            <p>Fresh tomatoes, mozzarella cheese, and basil.</p>
-            <div class="price">₹230</div>
-            <button class="add-to-cart" onclick="addToCart('Margherita Pizza', 230)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://www.spicebangla.com/wp-content/uploads/2024/08/Spicy-Pasta-recipe-optimised-scaled.webp" alt="Pasta">
-            <h3>Pasta</h3>
-            <p>Classic Italian pasta with creamy sauce and pancetta.</p>
-            <div class="price">₹140</div>
-            <button class="add-to-cart" onclick="addToCart('Pasta', 140)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://suhana.com/cdn/shop/articles/500-x-380-Biryani.png?v=1709544702" alt="Briyani">
-            <h3>Dum Briyani</h3>
-            <p>Dum Biryani is a slow-cooked, aromatic rice dish layered with marinated meat, fragrant spices, and saffron-infused basmati rice, sealed to trap flavors.</p>
-            <div class="price">₹150</div>
-            <button class="add-to-cart" onclick="addToCart('Briyani', 150)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://fullofplants.com/wp-content/uploads/2020/05/sweet-and-sour-spicy-thai-fried-rice-easy-vegan-meal-with-vegetables-thumb.jpg" alt="Fired Rice">
-            <h3>FIRED RICE</h3>
-            <p>Fried rice is a flavorful stir-fried dish made with cooked rice, vegetables, eggs, and protein, seasoned with soy sauce and aromatic spices.</p>
-            <div class="price">₹120</div>
-            <button class="add-to-cart" onclick="addToCart('Fired Rice', 120)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://www.kitchensanctuary.com/wp-content/uploads/2020/04/Chicken-Fried-Rice-square-FS-.jpg" alt="Chicken Rice">
-            <h3>Chicken Fried Rice</h3>
-            <p>Chicken rice is a delicious dish featuring tender chicken served with fragrant, flavorful rice, often accompanied by sauces and soup.</p>
-            <div class="price">₹170</div>
-            <button class="add-to-cart" onclick="addToCart('Chicken Rice', 170)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://i.ytimg.com/vi/iNwTdd2uk9s/maxresdefault.jpg" alt="Fry piece">
-            <h3>Fry piece</h3>
-            <p>Fry piece is a crispy, flavorful fried chicken or meat dish, marinated with spices and deep-fried to golden perfection.</p>
-            <div class="price">₹200</div>
-            <button class="add-to-cart" onclick="addToCart('Fry piece', 200)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://us2guntur.com/images//10067img/ChikWingsBiryani_B_281020.jpg" alt="Wings Biriyani">
-            <h3>Wings Biriyani</h3>
-            <p>Wings Biryani is a flavorful rice dish made with marinated chicken wings, aromatic spices, and basmati rice, slow-cooked to perfection for rich taste.</p>
-            <div class="price">₹230</div>
-            <button class="add-to-cart" onclick="addToCart('Wings Biriyani', 230)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-    <img src="https://www.cookwithmanali.com/wp-content/uploads/2018/04/Veg-Hakka-Noodles-500x500.jpg" alt="Hakka Noodles">
-    <h3>Veg Hakka Noodles</h3>
-    <p>Stir-fried noodles with crunchy vegetables and aromatic Indo-Chinese spices.</p>
-    <div class="price">₹130</div>
-    <button class="add-to-cart" onclick="addToCart('Veg Hakka Noodles', 130)">Add to Cart</button>
+    <div id="biryanis" class="category-label">
+        <h3>Biryanis</h3>
+    </div>
+    <div class="menu-item">
+        <img src="https://lh5.googleusercontent.com/proxy/YSiFdIaKRYW0QsO7mSFMgfYDA7cy7yAfQSVrkvowKz8FQGhYqE45sx3q8bGJvZus1CP6O3O0XASwIC8NUtO_Bei0-Yo85EGU2Q2r_idqqUMQZm84zMs5gQ7b" alt="Prawns Biriyani">
+        <h3>Prawns Biriyani</h3>
+        <p>Prawns biryani is a fragrant, spicy, and flavorful rice dish made with succulent prawns, aromatic spices, and basmati rice.</p>
+        <div class="price">₹419</div>
+        <button class="add-to-cart" onclick="addToCart('Prawns Biriyani', 419)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://suhana.com/cdn/shop/articles/500-x-380-Biryani.png?v=1709544702" alt="Briyani">
+        <h3>Dum Briyani</h3>
+        <p>Dum Biryani is a slow-cooked, aromatic rice dish layered with marinated meat, fragrant spices, and saffron-infused basmati rice, sealed to trap flavors.</p>
+        <div class="price">₹150</div>
+        <button class="add-to-cart" onclick="addToCart('Briyani', 150)">Add to Cart</button>
+    </div>
+   
+    <div class="menu-item">
+        <img src="https://i.ytimg.com/vi/iNwTdd2uk9s/maxresdefault.jpg" alt="Fry piece">
+        <h3>Fry piece</h3>
+        <p>Fry piece is a crispy, flavorful fried chicken or meat dish, marinated with spices and deep-fried to golden perfection.</p>
+        <div class="price">₹200</div>
+        <button class="add-to-cart" onclick="addToCart('Fry piece', 200)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://us2guntur.com/images//10067img/ChikWingsBiryani_B_281020.jpg" alt="Wings Biriyani">
+        <h3>Wings Biriyani</h3>
+        <p>Wings Biryani is a flavorful rice dish made with marinated chicken wings, aromatic spices, and basmati rice, slow-cooked to perfection for rich taste.</p>
+        <div class="price">₹230</div>
+        <button class="add-to-cart" onclick="addToCart('Wings Biriyani', 230)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+<img src="https://delishglobe.com/wp-content/uploads/2024/10/Mutton-Biryani-735x538.png" alt="Hakka Noodles">
+<h3>Mutton-Biryani</h3>
+<p>Mutton-Biryani with crunchy vegetables and aromaticspices.</p>
+<div class="price">₹530</div>
+<button class="add-to-cart" onclick="addToCart('Mutton-Biryani', 130)">Add to Cart</button>
 </div>
 
 <div class="menu-item">
-    <img src="https://www.licious.in/blog/wp-content/uploads/2020/12/Hyderabadi-chicken-Biryani.jpg" alt="Hyderabadi Biryani">
-    <h3>Hyderabadi Biryani</h3>
-    <p>Aromatic basmati rice layered with tender chicken and authentic Hyderabadi spices.</p>
-    <div class="price">₹280</div>
-    <button class="add-to-cart" onclick="addToCart('Hyderabadi Biryani', 280)">Add to Cart</button>
+<img src="https://www.licious.in/blog/wp-content/uploads/2020/12/Hyderabadi-chicken-Biryani.jpg" alt="Hyderabadi Biryani">
+<h3>Hyderabadi Biryani</h3>
+<p>Aromatic basmati rice layered with tender chicken and authentic Hyderabadi spices.</p>
+<div class="price">₹280</div>
+<button class="add-to-cart" onclick="addToCart('Hyderabadi Biryani', 280)">Add to Cart</button>
 </div>
 
 <div class="menu-item">
-    <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-1.jpg" alt="Paneer Butter Masala">
-    <h3>Paneer Butter Masala</h3>
-    <p>Creamy curry with soft paneer cubes in a rich tomato-based gravy.</p>
-    <div class="price">₹220</div>
-    <button class="add-to-cart" onclick="addToCart('Paneer Butter Masala', 220)">Add to Cart</button>
+<img src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-1.jpg" alt="Paneer Butter Masala">
+<h3>Paneer Butter Masala</h3>
+<p>Creamy curry with soft paneer cubes in a rich tomato-based gravy.</p>
+<div class="price">₹220</div>
+<button class="add-to-cart" onclick="addToCart('Paneer Butter Masala', 220)">Add to Cart</button>
 </div>
 
 <div class="menu-item">
-    <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2022/02/schezwan-noodles-recipe.jpg" alt="Schezwan Noodles">
-    <h3>Schezwan Noodles</h3>
-    <p>Spicy Indo-Chinese noodles with vegetables in hot schezwan sauce.</p>
-    <div class="price">₹160</div>
-    <button class="add-to-cart" onclick="addToCart('Schezwan Noodles', 160)">Add to Cart</button>
+<img src="https://feastfulfork.com/wp-content/uploads/2018/05/Fish-Biryani.jpg" alt="Schezwan Noodles">
+<h3>Fish biriyani</h3>
+<p>Fish Biryani is a flavorful and aromatic rice dish made with marinated fish, fragrant basmati rice, and a blend of spices. It’s a delicious seafood twist on traditional biryani.</p>
+<div class="price">₹450</div>
+<button class="add-to-cart" onclick="addToCart('Schezwan Noodles', 160)">Add to Cart</button>
 </div>
 
+
+    <div id="mandis" class="category-label">
+        <h3>Mandis</h3>
+    </div>
+    <div class="menu-item">
+        <img src="https://images.slurrp.com/prod/recipe_images/transcribe/dinner/Chicken-Mandi.webp" alt="Chicken Mandi">
+        <h3>Chicken Mandi</h3>
+        <p>Delicious Yemeni-style rice dish with tender chicken and aromatic spices.</p>
+        <div class="price">$750</div>
+        <button class="add-to-cart" onclick="addToCart('Chicken Mandi', 750)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://thenawabsbiryani.com/wp-content/uploads/2023/08/Untitled-design-33.webp" alt="Chicken Mandi">
+        <h3>Fry piece Mandi</h3>
+        <p>Delicious Yemeni-style rice dish with tender chicken and aromatic spices.</p>
+        <div class="price">₹750</div>
+        <button class="add-to-cart" onclick="addToCart('Chicken Mandi', 750)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://img.freepik.com/free-psd/delicious-lamb-shank-rice-dish-savory-stew-aromatic-spices_84443-42616.jpg" alt="Chicken Mandi">
+        <h3>Mutton Mandi</h3>
+        <p>Delicious Yemeni-style rice dish with tender chicken and aromatic spices.</p>
+        <div class="price">₹999</div>
+        <button class="add-to-cart" onclick="addToCart('Chicken Mandi', 999)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://b.zmtcdn.com/data/dish_photos/9fd/d6325bba0b6f608491a3a71412b759fd.jpg" alt="Chicken Mandi">
+        <h3>Fish Mandi</h3>
+        <p>Delicious Yemeni-style rice dish with Fish and aromatic spices.</p>
+        <div class="price">₹999</div>
+        <button class="add-to-cart" onclick="addToCart('Chicken Mandi', 999)">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEs3bWMWd6Gx1burCXWq4Utq0l69ie3pjN-w&s" alt="Chicken Mandi">
+        <h3>Prawns xMandi</h3>
+        <p>Delicious Yemeni-style rice dish with tender chicken and aromatic spices.</p>
+        <div class="price">₹899</div>
+        <button class="add-to-cart" onclick="addToCart('Chicken Mandi', 899)">Add to Cart</button>
+    </div>
+
+  
+<div id="cool-drinks" class="category-label">
+    <h3>Cool Drinks</h3>
+</div>
 <div class="menu-item">
-    <img src="https://www.cubesnjuliennes.com/wp-content/uploads/2020/07/Chicken-Manchurian-Recipe.jpg" alt="Chicken Manchurian">
+    <img src="https://citma.shorthandstories.com/6e7d13ef-02b7-42af-9d16-cce70df03f84/assets/G3zfKMJ2tq/shorthand-images5-2560x1440.jpg" alt="Coca Cola">
+    <h3>Coca Cola</h3>
+    <p>Coca-Cola is a popular carbonated soft drink with a sweet, refreshing taste and a signature blend of flavors.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Coca Cola', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://images.cnbctv18.com/wp-content/uploads/2022/02/thums-up-1-1019x573.png" alt="Thums Up">
+    <h3>Thums Up</h3>
+    <p>Thums Up is a popular carbonated soft drink with a bold and fizzy taste.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Thums Up', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://www.ghirne.com/wp-content/uploads/2025/01/images-4.jpeg" alt="Sprite">
+    <h3>Sprite</h3>
+    <p>Sprite is a crisp, clear, and refreshing lemon-lime flavored soft drink with a fizzy, citrusy taste.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Sprite', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/307876249/BX/DL/YH/98405810/red-bull-energy-drink-250ml.jpg" alt="Red Bull">
+    <h3>Red Bull</h3>
+    <p>Red Bull is an energy drink known for its stimulating blend of caffeine, taurine, and B vitamins, providing a quick boost of energy and alertness.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Red Bull', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://api.freelogodesign.org/assets/blog/thumb/4d422f79f0274913aeb31571270b9ea2_1176x840.jpg?t=638369671740000000" alt="7UP">
+    <h3>7UP</h3>
+    <p>7UP is a refreshing, lemon-lime flavored soft drink with a crisp and bubbly taste.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('7UP', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://cdn.zeptonow.com/production/ik-seo/tr:w-640,ar-1200-1200,pr-true,f-auto,q-80/cms/product_variant/5dea84a6-3e99-49af-a0fb-0c899f3ae358/Pepsi-Soft-Drink.jpeg" alt="Pepsi">
+    <h3>Pepsi</h3>
+    <p>Pepsi is a popular carbonated soft drink with a bold, sweet, and refreshing cola flavor.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Pepsi', 40)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://5.imimg.com/data5/SELLER/Default/2023/7/325817723/MB/YR/HX/106956345/mountain-dew-can-330-ml-2.jpg" alt="Mountain Dew">
+    <h3>Mountain Dew</h3>
+    <p>Mountain Dew is a citrus-flavored, highly carbonated soft drink known for its bold, refreshing taste and high caffeine content.</p>
+    <div class="price">₹40</div>
+    <button class="add-to-cart" onclick="addToCart('Mountain Dew', 40)">Add to Cart</button>
+</div>
+
+    <div id="fast-foods" class="category-label">
+    <h3>Fast Foods</h3>
+</div>
+<div class="menu-item">
+    <img src="https://thechutneylife.com/wp-content/uploads/2021/03/Thaibasilfriedrice-reshoot-3-scaled.jpg" alt="Fired Rice">
+    <h3>FIRED RICE</h3>
+    <p>Fried rice is a flavorful stir-fried dish made with cooked rice, vegetables, eggs, and protein, seasoned with soy sauce and aromatic spices.</p>
+    <div class="price">₹120</div>
+    <button class="add-to-cart" onclick="addToCart('Fired Rice', 120)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://i.ytimg.com/vi/TxGcN7kM_po/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLACKV_LxpYfEIluuIaC8KWSNLOl9A" alt="Chicken Rice">
+    <h3>Chicken Fried Rice</h3>
+    <p>Chicken rice is a delicious dish featuring tender chicken served with fragrant, flavorful rice, often accompanied by sauces and soup.</p>
+    <div class="price">₹170</div>
+    <button class="add-to-cart" onclick="addToCart('Chicken Rice', 170)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://orders.popskitchen.in/storage/2024/09/image-148.png" alt="Chicken Manchurian">
     <h3>Chicken Manchurian</h3>
     <p>Deep-fried chicken balls tossed in spicy, tangy manchurian sauce.</p>
     <div class="price">₹240</div>
     <button class="add-to-cart" onclick="addToCart('Chicken Manchurian', 240)">Add to Cart</button>
+    </div>
+<div class="menu-item">
+    <img src="https://www.superbread.com/assets/images/product/recipes/cheese-burger.webp" alt="Cheese Burger">
+    <h3>Cheese Burger</h3>
+    <p>Juicy beef patty with melted cheese, lettuce, and tomato in a toasted bun.</p>
+    <div class="price">₹150</div>
+    <button class="add-to-cart" onclick="addToCart('Cheese Burger', 150)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://cdn2.hubspot.net/hubfs/326641/French%20fries%202.jpeg" alt="French Fries">
+    <h3>French Fries</h3>
+    <p>Golden, crispy fries served with ketchup and mayo.</p>
+    <div class="price">₹80</div>
+    <button class="add-to-cart" onclick="addToCart('French Fries', 80)">Add to Cart</button>
 </div>
 
 <div class="menu-item">
-    <img src="https://www.indianveggiedelight.com/wp-content/uploads/2017/09/veg-momos-featured.jpg" alt="Veg Momos">
-    <h3>Veg Momos</h3>
-    <p>Steamed dumplings filled with spiced vegetables, served with hot chutney.</p>
+    <img src="https://cdn.britannica.com/27/213427-050-869B98FE/Chicago-style-hot-dog.jpg" alt="Hot Dog">
+    <h3>Hot Dog</h3>
+    <p>Grilled sausage in a bun, topped with mustard and ketchup.</p>
     <div class="price">₹120</div>
-    <button class="add-to-cart" onclick="addToCart('Veg Momos', 120)">Add to Cart</button>
+    <button class="add-to-cart" onclick="addToCart('Hot Dog', 120)">Add to Cart</button>
 </div>
-        </div>
-    <div class="drinks-section"></div>
-    <div class="section-title">
-        <h2>DRINKS</h2>
-    </div>
-    <div class="menu" id="drinks-section">
-        <div class="menu-item">
-            <img src="https://citma.shorthandstories.com/6e7d13ef-02b7-42af-9d16-cce70df03f84/assets/G3zfKMJ2tq/shorthand-images5-2560x1440.jpg" alt="Coca Cola">
-            <h3>Coca Cola</h3>
-            <p>Coca-Cola is a popular carbonated soft drink with a sweet, refreshing taste and a signature blend of flavors.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Coca Cola', 40)">Add to Cart</button>
-        </div>
-        
-        <div class="menu-item">
-            <img src="https://images.cnbctv18.com/wp-content/uploads/2022/02/thums-up-1-1019x573.png" alt="Thums Up">
-            <h3>Thums Up</h3>
-            <p>Coca-Cola is a popular carbonated soft drink with a sweet, refreshing taste and a signature blend of flavors.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Thums Up', 40)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://www.ghirne.com/wp-content/uploads/2025/01/images-4.jpeg" alt="Sprite">
-            <h3>Sprite</h3>
-            <p>Sprite is a crisp, clear, and refreshing lemon-lime flavored soft drink with a fizzy, citrusy taste.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Sprite', 40)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/307876249/BX/DL/YH/98405810/red-bull-energy-drink-250ml.jpg" alt="Red Bull">
-            <h3>Red Bull</h3>
-            <p>Red Bull is an energy drink known for its stimulating blend of caffeine, taurine, and B vitamins, providing a quick boost of energy and alertness.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Red Bull', 40)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://api.freelogodesign.org/assets/blog/thumb/4d422f79f0274913aeb31571270b9ea2_1176x840.jpg?t=638369671740000000" alt="7UP">
-            <h3>7UP</h3>
-            <p>7UP is a refreshing, lemon-lime flavored soft drink with a crisp and bubbly taste.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('7UP', 40)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://cdn.zeptonow.com/production/ik-seo/tr:w-640,ar-1200-1200,pr-true,f-auto,q-80/cms/product_variant/5dea84a6-3e99-49af-a0fb-0c899f3ae358/Pepsi-Soft-Drink.jpeg" alt="Pepsi">
-            <h3>Pepsi</h3>
-            <p>Pepsi is a popular carbonated soft drink with a bold, sweet, and refreshing cola flavor.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Pepsi', 40)">Add to Cart</button>
-        </div>
-        <div class="menu-item">
-            <img src="https://5.imimg.com/data5/SELLER/Default/2023/7/325817723/MB/YR/HX/106956345/mountain-dew-can-330-ml-2.jpg" alt="Mountain Dew">
-            <h3>Mountain Dew</h3>
-            <p>Mountain Dew is a citrus-flavored, highly carbonated soft drink known for its bold, refreshing taste and high caffeine content.</p>
-            <div class="price">₹40</div>
-            <button class="add-to-cart" onclick="addToCart('Mountain Dew', 40)">Add to Cart</button>
-        </div>
-        
-    </div>
+<div class="menu-item">
+    <img src="https://5.imimg.com/data5/YR/NQ/GLADMIN-51056631/big-crunch-veg-classic-burger-500x500.png" alt="Burger">
+    <h3>Classic Burger</h3>
+    <p>Juicy beef patty with fresh lettuce, tomato, and cheese.</p>
+    <div class="price">₹250</div>
+    <button class="add-to-cart" onclick="addToCart('Classic Burger', 250)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://www.bora.com/fileadmin/_processed_/2/b/csm_Pizza_1edbbde8a5.jpg" alt="Pizza">
+    <h3>Pizza</h3>
+    <p>Fresh tomatoes, mozzarella cheese, and basil.</p>
+    <div class="price">₹230</div>
+    <button class="add-to-cart" onclick="addToCart('Margherita Pizza', 230)">Add to Cart</button>
+</div>
+<div class="menu-item">
+    <img src="https://www.eatfigsnotpigs.com/wp-content/uploads/2024/02/Creamy-Gochujang-Pasta_1606-500x500.jpg" alt="Pasta">
+    <h3>Pasta</h3>
+    <p>Classic Italian pasta with creamy sauce and pancetta.</p>
+    <div class="price">₹140</div>
+    <button class="add-to-cart" onclick="addToCart('Pasta', 140)">Add to Cart</button>
+</div>
+</div>
     <div class="cart-container">
     <div class="cart" id="cart">
         <h2>Your Cart</h2>
@@ -578,7 +711,10 @@ window.onload = updateCart;
             window.location.href = "CONTACT.html";
         }
         updateCart();
-        
+
+
+
+
     </script>
 </body>
 
