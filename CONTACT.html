@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="responsive.css">
     <title>Simple Form</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -97,12 +98,34 @@
         }
 
         .success-message {
-            background: #4CAF50;
+            display: none; 
+            background: #4caf50;
             color: white;
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
-            display: none;
+            text-align: center;
+            font-size: 16px;
+            animation: fadeInOut 3s ease-in-out; 
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            80% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
         }
 
         .error-message {
@@ -114,7 +137,7 @@
             display: none;
         }
 
-        /* Header Styles */
+      
         .main-header {
             background: linear-gradient(135deg, #d32f2f, #b71c1c);
             color: white;
@@ -150,7 +173,6 @@
             font-size: 16px;
         }
 
-        /* Footer Styles */
         .footer {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -202,7 +224,6 @@
             font-size: 20px;
         }
 
-        /* Update form submit button styles */
         form button {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -224,7 +245,7 @@
             box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
         }
 
-        /* Add these to your existing styles */
+   
         .form-feedback {
             padding: 10px;
             margin-top: 10px;
@@ -260,31 +281,44 @@
 
 
     <form id="simpleForm" onsubmit="return handleSubmit(event);">
-        <h1>Fill the details</h1>
-        <p>Please provide all required details.</p>
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you! Please fill out the form below.</p>
 
-        <label for="firstName">First Name <span class="required">*</span></label>
-        <input type="text" id="firstName" name="firstName" required>
+        <div class="form-group">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+        </div>
 
-        <label for="lastName">Last Name <span class="required">*</span></label>
-        <input type="text" id="lastName" name="lastName" required>
+        <div class="form-group">
+            <label for="lastName">Last Name <span class="required">*</span></label>
+            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+        </div>
 
-        <label for="contactNumber">Contact Number <span class="required">*</span></label>
-        <input type="tel" id="contactNumber" name="contactNumber" required placeholder="(000) 000-0000">
+        <div class="form-group">
+            <label for="contactNumber">Contact Number <span class="required">*</span></label>
+            <input type="tel" id="contactNumber" name="contactNumber" placeholder="(+91)00000-00000" required>
+        </div>
 
-        <label for="email">E-mail <span class="required">*</span></label>
-        <input type="email" id="email" name="email" required placeholder="example@example.com">
+        <div class="form-group">
+            <label for="email">E-mail <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="example@example.com" required>
+        </div>
 
-        <label for="others">Others <span class="required">*</span></label>
-        <input type="text" id="others" name="others" required>
+        <div class="form-group">
+            <label for="others">Others <span class="required">*</span></label>
+            <input type="text" id="others" name="others" placeholder="Enter additional details" required>
+        </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4"></textarea>
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Write your message here..."></textarea>
+        </div>
 
         <button type="submit">Submit</button>
+        <div class="success-message" id="successMessage">Form submitted successfully!</div>
     </form>
 
-    <!-- Add Footer -->
+
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -328,36 +362,33 @@
         function handleSubmit(event) {
             event.preventDefault();
 
-            // Show loading state
             const submitButton = event.target.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.textContent;
             submitButton.disabled = true;
             submitButton.textContent = 'Submitting...';
 
-            // Get form values
+           
             const formData = new FormData(event.target);
-            
-            // Google Apps Script URL
+
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwvw9wwr00d2g3B8YGYoWc0RGbWHZCmH0WSjkM8NY7XRrs25-uzTEvO7-MSllyMGHQuKg/exec';
 
-            // Send as form data instead of JSON
+        
             fetch(scriptURL, {
                 method: 'POST',
-                mode: 'no-cors', // Add this line
+                mode: 'no-cors',
                 body: formData
             })
             .then(() => {
-                // Success - note we can't actually check response.ok with no-cors
+               
                 alert('Form submitted successfully!');
                 document.getElementById('simpleForm').reset();
-                
+                window.location.href = 'index.html';
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error submitting form. Please try again.');
             })
             .finally(() => {
-                // Reset button state
                 submitButton.disabled = false;
                 submitButton.textContent = originalButtonText;
             });
